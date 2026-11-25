@@ -1,0 +1,555 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light" />
+    <link rel="icon" href="data:," />
+    <title>ドヤる会 へー！ボタン</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700;800;900&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet" />
+    <style>
+      :root{
+        --bg:#FFF6E5;
+        --ink:#2B2118;
+        --ink-soft:#6B5B4A;
+        --card:#FFFFFF;
+        --line:#F0DFC2;
+        --sun:#FFB800;
+        --sun-deep:#F59E0B;
+        --coral:#FF5A5F;
+        --sky:#2EC4E6;
+        --mint:#2ED3A3;
+        --grape:#8B5CF6;
+        --pink:#FF7AB6;
+        --radius:20px;
+        --shadow:0 6px 0 rgba(43,33,24,.08), 0 14px 28px rgba(43,33,24,.08);
+      }
+      *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+      html{ scroll-behavior:smooth; }
+      body{
+        margin:0;
+        font-family:"Noto Sans JP", system-ui, -apple-system, "Hiragino Kaku Gothic ProN", sans-serif;
+        background:
+          radial-gradient(1100px 500px at 110% -10%, #FFE3A3 0%, transparent 55%),
+          radial-gradient(900px 480px at -10% 8%, #FFD9E8 0%, transparent 50%),
+          var(--bg);
+        color:var(--ink);
+        min-height:100dvh;
+      }
+      button{ font-family:inherit; cursor:pointer; }
+
+      /* ===== 上部：総合計 ===== */
+      .topbar{
+        position:sticky; top:0; z-index:30;
+        background:rgba(255,246,229,.88);
+        backdrop-filter:blur(10px);
+        -webkit-backdrop-filter:blur(10px);
+        border-bottom:3px solid var(--ink);
+      }
+      .topbar-inner{
+        max-width:880px; margin:0 auto;
+        padding:12px 16px 14px;
+        display:flex; align-items:center; gap:14px;
+      }
+      .brand{ flex:1 1 auto; min-width:0; }
+      .brand .kai{
+        font-family:"M PLUS Rounded 1c", sans-serif;
+        font-weight:900; font-size:13px; letter-spacing:.14em;
+        color:var(--coral);
+      }
+      .brand h1{
+        font-family:"M PLUS Rounded 1c", sans-serif;
+        font-weight:900; font-size:clamp(22px, 6vw, 30px);
+        line-height:1.15; margin:2px 0 0;
+      }
+      .brand p{ margin:4px 0 0; font-size:12.5px; color:var(--ink-soft); font-weight:500; }
+      .total-box{
+        flex:0 0 auto; text-align:center;
+        background:var(--ink); color:#FFF3D6;
+        border-radius:16px; padding:8px 16px 10px;
+        box-shadow:0 5px 0 rgba(43,33,24,.25);
+        min-width:118px;
+      }
+      .total-box .label{ font-size:11px; font-weight:700; letter-spacing:.08em; opacity:.85; }
+      .total-box .num{
+        font-family:"M PLUS Rounded 1c", sans-serif;
+        font-weight:900; font-size:34px; line-height:1.05;
+        font-variant-numeric:tabular-nums;
+        display:inline-block;
+      }
+      .total-box .bump{ animation:bump .45s cubic-bezier(.2,2.2,.4,1); display:inline-block; }
+      @keyframes bump{ 0%{transform:scale(1)} 35%{transform:scale(1.28) rotate(-3deg)} 100%{transform:scale(1)} }
+      .demo-pill{
+        display:none;
+        margin-top:6px;
+        font-size:10.5px; font-weight:700;
+        background:#FFE9B8; color:#8A5A00;
+        border:1.5px dashed #D99A00;
+        border-radius:999px; padding:2px 8px;
+      }
+      .demo-pill.on{ display:inline-block; }
+
+      main{ max-width:880px; margin:0 auto; padding:18px 14px 40px; }
+
+      .howto{
+        background:var(--card); border:2.5px solid var(--ink); border-radius:var(--radius);
+        box-shadow:var(--shadow);
+        padding:14px 16px; margin-bottom:22px;
+        display:flex; gap:12px; align-items:center;
+      }
+      .howto .face{
+        font-family:"M PLUS Rounded 1c", sans-serif; font-weight:900;
+        font-size:30px; line-height:1; flex:0 0 auto;
+        background:var(--sun); border:2.5px solid var(--ink); border-radius:14px;
+        width:56px; height:56px; display:grid; place-items:center;
+        transform:rotate(-4deg);
+      }
+      .howto p{ margin:0; font-size:14.5px; line-height:1.65; font-weight:500; }
+      .howto p b{ color:var(--coral); font-weight:900; }
+      .howto .sub{ font-size:12.5px; color:var(--ink-soft); margin-top:2px; }
+
+      /* ===== セクション見出し ===== */
+      .sec-head{
+        display:flex; align-items:center; gap:10px;
+        margin:26px 2px 12px;
+      }
+      .sec-head:first-of-type{ margin-top:4px; }
+      .sec-head .tag{
+        font-family:"M PLUS Rounded 1c", sans-serif; font-weight:900;
+        font-size:14px; color:#fff;
+        padding:5px 14px; border-radius:999px;
+        border:2.5px solid var(--ink);
+        box-shadow:0 3px 0 rgba(43,33,24,.85);
+      }
+      .sec-head .rule{ flex:1; border-top:3px dotted var(--line); }
+      .sec-head .sec-total{ font-size:12.5px; font-weight:700; color:var(--ink-soft); font-variant-numeric:tabular-nums; }
+
+      /* ===== 事例カード ===== */
+      .grid{ display:grid; grid-template-columns:1fr; gap:14px; }
+      @media (min-width:640px){ .grid{ grid-template-columns:1fr 1fr; } }
+
+      .card{
+        position:relative;
+        background:var(--card);
+        border:2.5px solid var(--ink);
+        border-radius:var(--radius);
+        box-shadow:var(--shadow);
+        padding:16px 16px 14px;
+        overflow:hidden;
+      }
+      .card::before{
+        content:""; position:absolute; inset:0 auto 0 0; width:8px;
+        background:var(--accent, var(--sun));
+      }
+      .card .lead-badge{
+        position:absolute; top:10px; right:12px;
+        font-size:11px; font-weight:900; color:var(--ink);
+        background:var(--sun); border:2px solid var(--ink); border-radius:999px;
+        padding:2px 9px; transform:rotate(3deg);
+        opacity:0; scale:.6; transition:opacity .25s, scale .25s;
+        pointer-events:none;
+      }
+      .card.is-lead .lead-badge{ opacity:1; scale:1; }
+      .card h2{
+        font-family:"M PLUS Rounded 1c", sans-serif;
+        font-weight:800; font-size:17.5px; line-height:1.4;
+        margin:0 4px 4px; padding-right:118px; min-height:1.4em;
+      }
+      .card .desc{ margin:0 0 12px 4px; font-size:13px; line-height:1.6; color:var(--ink-soft); }
+
+      .card .row{
+        display:flex; align-items:stretch; gap:12px; margin-left:4px;
+      }
+      .he-btn{
+        position:relative;
+        flex:1 1 auto;
+        min-height:64px;
+        border:3px solid var(--ink);
+        border-radius:16px;
+        background:linear-gradient(180deg, var(--accent, var(--sun)) 0%, var(--accent-deep, var(--sun-deep)) 100%);
+        color:#fff;
+        font-family:"M PLUS Rounded 1c", sans-serif;
+        font-weight:900; font-size:26px; letter-spacing:.04em;
+        text-shadow:0 2px 0 rgba(43,33,24,.28);
+        box-shadow:0 6px 0 var(--ink);
+        touch-action:manipulation;
+        user-select:none; -webkit-user-select:none;
+        transition:transform .06s, box-shadow .06s;
+      }
+      .he-btn:active{ transform:translateY(4px); box-shadow:0 2px 0 var(--ink); }
+      .he-btn.pop{ animation:btnpop .38s cubic-bezier(.2,2.4,.4,1); }
+      @keyframes btnpop{
+        0%{ transform:scale(1) }
+        30%{ transform:scale(1.07) rotate(-1.2deg) }
+        60%{ transform:scale(.97) }
+        100%{ transform:scale(1) }
+      }
+      .counts{
+        flex:0 0 86px;
+        display:flex; flex-direction:column; justify-content:center; gap:2px;
+        text-align:center;
+        background:#FFF9EC; border:2px solid var(--line); border-radius:14px;
+        padding:6px 4px;
+      }
+      .counts .all{ font-family:"M PLUS Rounded 1c", sans-serif; font-weight:900; font-size:22px; line-height:1.1; font-variant-numeric:tabular-nums; }
+      .counts .all-label{ font-size:10px; font-weight:700; color:var(--ink-soft); letter-spacing:.06em; }
+      .counts .mine{ font-size:11.5px; font-weight:700; color:var(--coral); font-variant-numeric:tabular-nums; margin-top:2px; }
+      .counts .all.tick{ animation:tick .3s ease; }
+      @keyframes tick{ 0%{transform:scale(1)} 40%{transform:scale(1.22)} 100%{transform:scale(1)} }
+
+      /* 浮かぶ +1 */
+      .plus-one{
+        position:absolute; z-index:5; pointer-events:none;
+        font-family:"M PLUS Rounded 1c", sans-serif; font-weight:900; font-size:22px;
+        color:var(--accent-deep, var(--sun-deep));
+        -webkit-text-stroke:1px #fff;
+        animation:floatUp .8s ease-out forwards;
+      }
+      @keyframes floatUp{
+        0%{ opacity:0; transform:translateY(6px) scale(.7) rotate(-6deg); }
+        18%{ opacity:1; }
+        100%{ opacity:0; transform:translateY(-64px) scale(1.25) rotate(5deg); }
+      }
+      /* 紙吹雪 */
+      .confetti{
+        position:absolute; z-index:6; pointer-events:none;
+        width:9px; height:13px; border-radius:2px;
+        animation:confFly .75s cubic-bezier(.15,.6,.4,1) forwards;
+      }
+      @keyframes confFly{
+        0%{ opacity:1; transform:translate(0,0) rotate(0deg) scale(1); }
+        100%{ opacity:0; transform:translate(var(--dx), var(--dy)) rotate(var(--rot)) scale(.8); }
+      }
+
+      footer{
+        max-width:880px; margin:0 auto; padding:0 16px 44px;
+        text-align:center; color:var(--ink-soft); font-size:12.5px; line-height:1.8;
+      }
+      footer .big{
+        font-family:"M PLUS Rounded 1c", sans-serif; font-weight:900;
+        font-size:17px; color:var(--ink);
+      }
+      .live-dot{
+        display:inline-block; width:8px; height:8px; border-radius:50%;
+        background:var(--mint); margin-right:5px; vertical-align:1px;
+        animation:pulse 1.6s ease-in-out infinite;
+      }
+      @keyframes pulse{ 0%,100%{opacity:1} 50%{opacity:.3} }
+
+      @media (prefers-reduced-motion: reduce){
+        *, *::before, *::after{ animation-duration:.01ms !important; transition-duration:.01ms !important; }
+      }
+    </style>
+  </head>
+  <body>
+
+    <header class="topbar">
+      <div class="topbar-inner">
+        <div class="brand">
+          <div class="kai">ドヤる会 ＠ランチタイム</div>
+          <h1>へー！ボタン</h1>
+          <p>すごいと思ったら、その場で連打！</p>
+          <span class="demo-pill" id="demoPill">接続準備中（デモモード）</span>
+        </div>
+        <div class="total-box" aria-live="polite">
+          <div class="label">みんなのへー！合計</div>
+          <div><span class="num">×&thinsp;<span id="totalNum">0</span></span></div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <div class="howto">
+        <div class="face">へ</div>
+        <div>
+          <p>発表を聞いて「<b>へー！</b>」と思った事例のボタンを、好きなだけ<b>連打</b>してください。回数は全員のスマホと合計にその場で反映されます。</p>
+          <p class="sub"><span class="live-dot"></span>3秒ごとに自動で最新カウントに更新されます。ログイン・入力は不要です。</p>
+        </div>
+      </div>
+
+      <div id="sections"></div>
+    </main>
+
+    <footer>
+      <div class="big">いちばん「へー！」が集まった事例はどれかな？</div>
+      結果は発表の最後にみんなで見よう。<br />
+      自分のドヤり事例も、ぜひその場で教えてください。
+    </footer>
+
+    <script>
+      /* ============================================================
+         設定：デプロイした Apps Script の URL をここに差し替える
+         ============================================================ */
+      var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwc552hGLgi9dRI-FikDWC4Txob-iBVT_9c-AQJvP2mbcxz8ViaFJrb6RyR2TSN9Xcg/exec';
+
+      var IS_DEMO = !APPS_SCRIPT_URL || APPS_SCRIPT_URL === 'APPS_SCRIPT_URL_HERE';
+
+      /* ===== 事例データ（順番・キーは固定） ===== */
+      var SECTIONS = [
+        { tag: '仕事編', color: '#FF5A5F', deep: '#E23E42', cases: [
+          { key: 'work1', title: '家ッス！信州 イベント案100', desc: '展示場クローズに向けたイベント案100件を、イラストとレーダーチャート付きのボードで管理・共有。' },
+          { key: 'work2', title: 'メール→カレンダー自動登録', desc: '届いたメールから日程を読み取って、予定を自動でカレンダーに登録。' },
+          { key: 'work3', title: '資料づくり（図面・翻訳・講演スライド）', desc: '図面の整理、翻訳、講演スライド化まで、資料仕事をまとめておまかせ。' }
+        ]},
+        { tag: '家庭編', color: '#2EC4E6', deep: '#1599BC', cases: [
+          { key: 'home1', title: '子どもお小遣い帳', desc: '子どものお小遣いを記録・集計。家族みんなで残高が見える。' },
+          { key: 'home2', title: '冷蔵庫・在庫ボード', desc: '冷蔵庫の中身と買い物メモを共有して、買い忘れ・ダブり買いを防止。' },
+          { key: 'home3', title: '修学旅行ガイド／逆立ちアプリ', desc: '修学旅行のしおりを子ども向けガイドに。逆立ち練習は家族で進捗管理。' }
+        ]},
+        { tag: '生活編', color: '#2ED3A3', deep: '#14A97E', cases: [
+          { key: 'life1', title: '毎朝の長野市ローカルブリーフ', desc: '開店情報・イベント・道路情報・天気を毎朝カードでお届け。' },
+          { key: 'life2', title: 'マラソン伴走と買い物の最安チェック', desc: '練習と大会に向けた伴走サポートと、買う前の価格くらべを手伝う。' }
+        ]}
+      ];
+
+      var ALL_KEYS = [];
+      SECTIONS.forEach(function (s) { s.cases.forEach(function (c) { ALL_KEYS.push(c.key); }); });
+
+      /* ===== 状態 =====
+         serverCounts : サーバー（またはデモ用ローカル）の確定カウント
+         pending      : 送信中でまだ確定していない自分のタップ数
+         myCounts     : 自分が押した回数（この端末のみ・メモリ内） */
+      var serverCounts = {};
+      var pending = {};
+      var myCounts = {};
+      ALL_KEYS.forEach(function (k) { serverCounts[k] = 0; pending[k] = 0; myCounts[k] = 0; });
+
+      var CONFETTI_COLORS = ['#FFB800', '#FF5A5F', '#2EC4E6', '#2ED3A3', '#8B5CF6', '#FF7AB6'];
+
+      /* ===== DOM 構築 ===== */
+      var sectionsEl = document.getElementById('sections');
+      var totalNumEl = document.getElementById('totalNum');
+      var cardEls = {};   // key -> {card, allEl, mineEl, btn}
+      var secTotalEls = [];
+
+      SECTIONS.forEach(function (sec, si) {
+        var head = document.createElement('div');
+        head.className = 'sec-head';
+        head.innerHTML = '<span class="tag"></span><span class="rule"></span><span class="sec-total"></span>';
+        head.querySelector('.tag').textContent = sec.tag;
+        head.querySelector('.tag').style.background = sec.color;
+        sectionsEl.appendChild(head);
+        secTotalEls[si] = head.querySelector('.sec-total');
+
+        var grid = document.createElement('div');
+        grid.className = 'grid';
+        sectionsEl.appendChild(grid);
+
+        sec.cases.forEach(function (c) {
+          var card = document.createElement('article');
+          card.className = 'card';
+          card.style.setProperty('--accent', sec.color);
+          card.style.setProperty('--accent-deep', sec.deep);
+
+          var badge = document.createElement('span');
+          badge.className = 'lead-badge';
+          badge.textContent = '👑 いま一番へー！';
+          card.appendChild(badge);
+
+          var h2 = document.createElement('h2');
+          h2.textContent = c.title;
+          card.appendChild(h2);
+
+          var desc = document.createElement('p');
+          desc.className = 'desc';
+          desc.textContent = c.desc;
+          card.appendChild(desc);
+
+          var row = document.createElement('div');
+          row.className = 'row';
+
+          var btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'he-btn';
+          btn.textContent = 'へー！';
+          btn.setAttribute('aria-label', c.title + ' に へー！する');
+
+          var counts = document.createElement('div');
+          counts.className = 'counts';
+          counts.innerHTML =
+            '<div class="all-label">みんなの</div>' +
+            '<div class="all">0</div>' +
+            '<div class="mine">自分：0回</div>';
+
+          row.appendChild(btn);
+          row.appendChild(counts);
+          card.appendChild(row);
+          grid.appendChild(card);
+
+          cardEls[c.key] = {
+            card: card,
+            btn: btn,
+            allEl: counts.querySelector('.all'),
+            mineEl: counts.querySelector('.mine'),
+            section: si
+          };
+
+          btn.addEventListener('click', function () { hit(c.key); });
+        });
+      });
+
+      if (IS_DEMO) document.getElementById('demoPill').classList.add('on');
+
+      /* ===== 表示更新 ===== */
+      var lastTotal = 0;
+      function displayCount(k) { return serverCounts[k] + pending[k]; }
+
+      function render(changedKey) {
+        var total = 0;
+        var secTotals = SECTIONS.map(function () { return 0; });
+        var leadKey = null, leadVal = 0;
+
+        ALL_KEYS.forEach(function (k) {
+          var v = displayCount(k);
+          total += v;
+          secTotals[cardEls[k].section] += v;
+          if (v > leadVal) { leadVal = v; leadKey = k; }
+          var els = cardEls[k];
+          if (els.allEl.textContent !== String(v)) {
+            els.allEl.textContent = v;
+            if (k === changedKey) {
+              els.allEl.classList.remove('tick');
+              void els.allEl.offsetWidth;
+              els.allEl.classList.add('tick');
+            }
+          }
+          els.mineEl.textContent = '自分：' + myCounts[k] + '回';
+          els.card.classList.toggle('is-lead', leadVal > 0 && k === leadKey);
+        });
+
+        secTotalEls.forEach(function (el, i) { el.textContent = '小計 ' + secTotals[i]; });
+
+        if (total !== lastTotal) {
+          totalNumEl.textContent = total;
+          totalNumEl.classList.remove('bump');
+          void totalNumEl.offsetWidth;
+          totalNumEl.classList.add('bump');
+          lastTotal = total;
+        }
+      }
+
+      /* ===== 演出 ===== */
+      var audioCtx = null;
+      function popSound() {
+        try {
+          if (!audioCtx) {
+            var AC = window.AudioContext || window.webkitAudioContext;
+            if (!AC) return;
+            audioCtx = new AC();
+          }
+          if (audioCtx.state === 'suspended') audioCtx.resume();
+          var t = audioCtx.currentTime;
+          var osc = audioCtx.createOscillator();
+          var gain = audioCtx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(520 + Math.random() * 160, t);
+          osc.frequency.exponentialRampToValueAtTime(880, t + 0.09);
+          gain.gain.setValueAtTime(0.12, t);
+          gain.gain.exponentialRampToValueAtTime(0.001, t + 0.12);
+          osc.connect(gain); gain.connect(audioCtx.destination);
+          osc.start(t); osc.stop(t + 0.13);
+        } catch (e) { /* 音が出なくても押せることを優先 */ }
+      }
+
+      function effects(key) {
+        var els = cardEls[key];
+        var btn = els.btn;
+
+        btn.classList.remove('pop');
+        void btn.offsetWidth;
+        btn.classList.add('pop');
+
+        var card = els.card;
+        var bRect = btn.getBoundingClientRect();
+        var cRect = card.getBoundingClientRect();
+        var cx = bRect.left - cRect.left + bRect.width / 2;
+        var cy = bRect.top - cRect.top + 6;
+
+        var plus = document.createElement('span');
+        plus.className = 'plus-one';
+        plus.textContent = '+1';
+        plus.style.left = (cx - 14 + (Math.random() * 30 - 15)) + 'px';
+        plus.style.top = cy + 'px';
+        card.appendChild(plus);
+        setTimeout(function () { plus.remove(); }, 850);
+
+        var n = 7 + Math.floor(Math.random() * 4);
+        for (var i = 0; i < n; i++) {
+          var conf = document.createElement('span');
+          conf.className = 'confetti';
+          conf.style.background = CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)];
+          conf.style.left = cx + 'px';
+          conf.style.top = cy + 'px';
+          conf.style.setProperty('--dx', (Math.random() * 150 - 75) + 'px');
+          conf.style.setProperty('--dy', (-(30 + Math.random() * 80)) + 'px');
+          conf.style.setProperty('--rot', (Math.random() * 560 - 280) + 'deg');
+          card.appendChild(conf);
+          (function (el) { setTimeout(function () { el.remove(); }, 800); })(conf);
+        }
+        popSound();
+      }
+
+      /* ===== サーバー応答の取り込み =====
+         想定形式： { counts: {work1: 12, ...}, total: 34 }
+                   または { work1: 12, ..., total: 34 } */
+      function applyResponse(data) {
+        if (!data || typeof data !== 'object') return;
+        var src = (data.counts && typeof data.counts === 'object') ? data.counts : data;
+        ALL_KEYS.forEach(function (k) {
+          var v = src[k];
+          if (typeof v === 'number' && isFinite(v) && v >= 0) serverCounts[k] = v;
+        });
+      }
+
+      function api(params) {
+        var qs = Object.keys(params).map(function (k) {
+          return encodeURIComponent(k) + '=' + encodeURIComponent(params[k]);
+        }).join('&');
+        return fetch(APPS_SCRIPT_URL + '?' + qs, { method: 'GET' })
+          .then(function (r) { return r.json(); });
+      }
+
+      /* ===== タップ処理：演出は即時、送信は裏で ===== */
+      function hit(key) {
+        myCounts[key]++;
+        effects(key);
+
+        if (IS_DEMO) {
+          serverCounts[key]++;
+          render(key);
+          return;
+        }
+        pending[key]++;
+        render(key);
+        api({ action: 'hit', case: key })
+          .then(function (data) {
+            pending[key] = Math.max(0, pending[key] - 1);
+            if (data) applyResponse(data);
+            render(key);
+          })
+          .catch(function () {
+            /* 通信に失敗しても、押した分はこの端末の表示に残す */
+            pending[key] = Math.max(0, pending[key] - 1);
+            serverCounts[key]++;
+            render(key);
+          });
+      }
+
+      /* ===== 3秒ごとのライブ更新 ===== */
+      function poll() {
+        if (IS_DEMO) return;
+        api({ action: 'get' })
+          .then(function (data) { applyResponse(data); render(null); })
+          .catch(function () { /* エラーは表示しない（次のポーリングで再試行） */ });
+      }
+      if (!IS_DEMO) {
+        poll();
+        setInterval(poll, 3000);
+      }
+
+      render(null);
+    </script>
+  </body>
+</html>
